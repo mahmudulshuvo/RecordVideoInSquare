@@ -8,12 +8,14 @@
 
 /* Begin PBXBuildFile section */
 		C826F00E1DCDAD2400A77D4C /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = C826F00D1DCDAD2400A77D4C /* AppDelegate.swift */; };
-		C826F0101DCDAD2400A77D4C /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C826F00F1DCDAD2400A77D4C /* ViewController.swift */; };
 		C826F0131DCDAD2400A77D4C /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = C826F0111DCDAD2400A77D4C /* Main.storyboard */; };
 		C826F0151DCDAD2400A77D4C /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = C826F0141DCDAD2400A77D4C /* Assets.xcassets */; };
 		C826F0181DCDAD2400A77D4C /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = C826F0161DCDAD2400A77D4C /* LaunchScreen.storyboard */; };
 		C826F0231DCDAD2400A77D4C /* SquareVideoTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = C826F0221DCDAD2400A77D4C /* SquareVideoTests.swift */; };
 		C826F02E1DCDAD2400A77D4C /* SquareVideoUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = C826F02D1DCDAD2400A77D4C /* SquareVideoUITests.swift */; };
+		C826F0461DCDF69700A77D4C /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C826F0431DCDF69700A77D4C /* ViewController.swift */; };
+		C826F0471DCDF69700A77D4C /* CameraEngine.swift in Sources */ = {isa = PBXBuildFile; fileRef = C826F0441DCDF69700A77D4C /* CameraEngine.swift */; };
+		C826F0481DCDF69700A77D4C /* VideoWriter.swift in Sources */ = {isa = PBXBuildFile; fileRef = C826F0451DCDF69700A77D4C /* VideoWriter.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -36,7 +38,6 @@
 /* Begin PBXFileReference section */
 		C826F00A1DCDAD2400A77D4C /* SquareVideo.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = SquareVideo.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		C826F00D1DCDAD2400A77D4C /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
-		C826F00F1DCDAD2400A77D4C /* ViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewController.swift; sourceTree = "<group>"; };
 		C826F0121DCDAD2400A77D4C /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
 		C826F0141DCDAD2400A77D4C /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		C826F0171DCDAD2400A77D4C /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
@@ -47,6 +48,9 @@
 		C826F0291DCDAD2400A77D4C /* SquareVideoUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = SquareVideoUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		C826F02D1DCDAD2400A77D4C /* SquareVideoUITests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SquareVideoUITests.swift; sourceTree = "<group>"; };
 		C826F02F1DCDAD2400A77D4C /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		C826F0431DCDF69700A77D4C /* ViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ViewController.swift; sourceTree = "<group>"; };
+		C826F0441DCDF69700A77D4C /* CameraEngine.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CameraEngine.swift; sourceTree = "<group>"; };
+		C826F0451DCDF69700A77D4C /* VideoWriter.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = VideoWriter.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -98,7 +102,9 @@
 			isa = PBXGroup;
 			children = (
 				C826F00D1DCDAD2400A77D4C /* AppDelegate.swift */,
-				C826F00F1DCDAD2400A77D4C /* ViewController.swift */,
+				C826F0431DCDF69700A77D4C /* ViewController.swift */,
+				C826F0441DCDF69700A77D4C /* CameraEngine.swift */,
+				C826F0451DCDF69700A77D4C /* VideoWriter.swift */,
 				C826F0111DCDAD2400A77D4C /* Main.storyboard */,
 				C826F0141DCDAD2400A77D4C /* Assets.xcassets */,
 				C826F0161DCDAD2400A77D4C /* LaunchScreen.storyboard */,
@@ -259,8 +265,10 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				C826F0101DCDAD2400A77D4C /* ViewController.swift in Sources */,
+				C826F0481DCDF69700A77D4C /* VideoWriter.swift in Sources */,
+				C826F0461DCDF69700A77D4C /* ViewController.swift in Sources */,
 				C826F00E1DCDAD2400A77D4C /* AppDelegate.swift in Sources */,
+				C826F0471DCDF69700A77D4C /* CameraEngine.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -412,6 +420,8 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
+				DEVELOPMENT_TEAM = "";
 				INFOPLIST_FILE = SquareVideo/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = com.shuvo.SquareVideo;
@@ -424,6 +434,8 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
+				DEVELOPMENT_TEAM = "";
 				INFOPLIST_FILE = SquareVideo/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = com.shuvo.SquareVideo;
@@ -505,6 +517,7 @@
 				C826F0341DCDAD2400A77D4C /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 		C826F0351DCDAD2400A77D4C /* Build configuration list for PBXNativeTarget "SquareVideoTests" */ = {
 			isa = XCConfigurationList;
@@ -513,6 +526,7 @@
 				C826F0371DCDAD2400A77D4C /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 		C826F0381DCDAD2400A77D4C /* Build configuration list for PBXNativeTarget "SquareVideoUITests" */ = {
 			isa = XCConfigurationList;
@@ -521,6 +535,7 @@
 				C826F03A1DCDAD2400A77D4C /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
 	};

@@ -41,6 +41,7 @@ class CameraEngine : NSObject, AVCaptureVideoDataOutputSampleBufferDelegate, AVC
         {
             let videoInput = try AVCaptureDeviceInput(device: videoDevice) as AVCaptureDeviceInput
             captureSession.addInput(videoInput)
+            captureSession.sessionPreset = AVCaptureSessionPresetLow
         }
         catch let error as NSError {
             print(error.localizedDescription)
@@ -50,7 +51,7 @@ class CameraEngine : NSObject, AVCaptureVideoDataOutputSampleBufferDelegate, AVC
         {
             let audioInput = try AVCaptureDeviceInput(device: audioDevice) as AVCaptureDeviceInput
             captureSession.addInput(audioInput)
-        }
+        } 
         catch let error as NSError {
             print(error.localizedDescription)
         }

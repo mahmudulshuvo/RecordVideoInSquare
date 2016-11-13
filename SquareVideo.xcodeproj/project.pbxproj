@@ -199,6 +199,7 @@
 				TargetAttributes = {
 					C826F0091DCDAD2400A77D4C = {
 						CreatedOnToolsVersion = 8.1;
+						DevelopmentTeam = LBS8CGX65G;
 						ProvisioningStyle = Automatic;
 					};
 					C826F01D1DCDAD2400A77D4C = {
@@ -421,7 +422,7 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
-				DEVELOPMENT_TEAM = "";
+				DEVELOPMENT_TEAM = LBS8CGX65G;
 				INFOPLIST_FILE = SquareVideo/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = com.shuvo.SquareVideo;
@@ -435,7 +436,7 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
-				DEVELOPMENT_TEAM = "";
+				DEVELOPMENT_TEAM = LBS8CGX65G;
 				INFOPLIST_FILE = SquareVideo/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = com.shuvo.SquareVideo;

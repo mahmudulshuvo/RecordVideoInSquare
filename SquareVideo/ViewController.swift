@@ -11,102 +11,187 @@ import AVFoundation
 
 class ViewController: UIViewController, AVCaptureVideoDataOutputSampleBufferDelegate {
     
-    var startButton, stopButton, pauseResumeButton : UIButton!
+    @IBOutlet weak var btnStack: UIStackView!
+    @IBOutlet weak var startBtn: UIButton!
+    @IBOutlet weak var stopBtn: UIButton!
+    @IBOutlet weak var pauseResumeBtn: UIButton!
+    @IBOutlet weak var videoView: UIView!
+    
+    var appDelegate = UIApplication.shared.delegate as! AppDelegate
+    var leftConstraint = NSLayoutConstraint()
+    var rightConstraint = NSLayoutConstraint()
+    var bottomConstraint = NSLayoutConstraint()
+    var heightConstraint = NSLayoutConstraint()
+    var videoLayer = AVCaptureVideoPreviewLayer()
+    
     var isRecording = false
     let cameraEngine = CameraEngine()
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        UIDevice.current.setValue(UIInterfaceOrientation.portrait.rawValue, forKey: "orientation")
         
+        appDelegate.orientation = "ForTheFirstTime"
+        setupConstraints()
+        setupButton()
         cameraEngine.startup()
         
-        let videoView = UIView()
-        videoView.frame = CGRect(x: 0, y: 50, width: self.view
-            .frame.size.width, height: self.view.frame.size.width)
-        videoView.backgroundColor = UIColor.black
-        self.view.addSubview(videoView)
+        videoLayer = AVCaptureVideoPreviewLayer(session: cameraEngine.captureSession)
+        videoLayer.frame = self.videoView.bounds
         
-        let videoLayer = AVCaptureVideoPreviewLayer(session: cameraEngine.captureSession)
-        videoLayer?.frame = CGRect(x: 0, y: 0, width: 350, height: 350)
-        let diameter = min((videoLayer?.frame.size.width)!, (videoLayer?.frame.size.height)!) * 0.8
-        videoLayer?.frame = CGRect(x :(self.view.frame.size.width - diameter)/2,
-                                   y :(self.view.frame.size.width - diameter)/2,
-                                   width :diameter, height :diameter);
-        videoLayer?.cornerRadius = diameter / 2
-        videoLayer?.masksToBounds = true
-        videoLayer?.videoGravity = AVLayerVideoGravityResizeAspectFill
-        
-        videoView.layer.addSublayer(videoLayer!)
-        
-        let previewLayerConnection = videoLayer?.connection
-        previewLayerConnection?.videoOrientation = AVCaptureVideoOrientation.portrait
+        let diameter = min((videoLayer.frame.size.width), (videoLayer.frame.size.height)) * 0.8
+        videoLayer.frame = CGRect(x :(self.videoView.frame.size.width - diameter)/2,
+                                  y :(self.videoView.frame.size.height - diameter)/2,
+                                  width :diameter, height :diameter)
+        videoLayer.cornerRadius = diameter/2
+        videoLayer.masksToBounds = true
+        videoLayer.videoGravity = AVLayerVideoGravityResizeAspectFill
+        videoView.layer.addSublayer(videoLayer)
         
         
-        setupButton()
     }
     
-    override var shouldAutorotate: Bool {
-        return false
+    
+    override func didRotate(from fromInterfaceOrientation: UIInterfaceOrientation) {
+        
+        switch UIDevice.current.orientation{
+            
+        case .portrait:
+            appDelegate.orientation = "Portrait"
+            setupConstraints()
+            
+        case .portraitUpsideDown:
+            appDelegate.orientation = "PortraitUpsideDown"
+            
+        case .landscapeLeft:
+            appDelegate.orientation = "LandscapeLeft"
+            setupConstraints()
+            
+        case .landscapeRight:
+            appDelegate.orientation = "LandscapeRight"
+            setupConstraints()
+            
+        default:
+            appDelegate.orientation = "Another"
+        }
+        NSLog("You have moved: \(appDelegate.orientation)")
     }
     
-    override var supportedInterfaceOrientations: UIInterfaceOrientationMask {
-        return UIInterfaceOrientationMask(rawValue: UInt(Int(UIInterfaceOrientationMask.portrait.rawValue)))
-    }
     
-    override var preferredInterfaceOrientationForPresentation: UIInterfaceOrientation {
-        return UIInterfaceOrientation.portrait
+    func setupConstraints() {
+        
+        if (appDelegate.orientation == "ForTheFirstTime") {
+            
+            videoView.translatesAutoresizingMaskIntoConstraints = false
+            videoView.leadingAnchor.constraint(equalTo: self.view.leadingAnchor).isActive = true
+            videoView.topAnchor.constraint(equalTo: self.view.topAnchor).isActive = true
+            videoView.widthAnchor.constraint(equalToConstant: 325).isActive = true
+            videoView.heightAnchor.constraint(equalToConstant: 325).isActive = true
+            
+            btnStack.translatesAutoresizingMaskIntoConstraints = false
+            btnStack.distribution = .fillEqually
+            leftConstraint = NSLayoutConstraint(item: btnStack, attribute: NSLayoutAttribute.left, relatedBy: NSLayoutRelation.equal, toItem: self.view, attribute: NSLayoutAttribute.left, multiplier: 1, constant: 50)
+            rightConstraint = NSLayoutConstraint(item: btnStack, attribute: NSLayoutAttribute.right, relatedBy: NSLayoutRelation.equal, toItem: self.view, attribute: NSLayoutAttribute.right, multiplier: 1, constant: -50)
+            bottomConstraint = NSLayoutConstraint(item: btnStack, attribute: NSLayoutAttribute.bottom, relatedBy: NSLayoutRelation.equal, toItem: self.view, attribute: NSLayoutAttribute.bottom, multiplier: 1, constant: -50)
+            heightConstraint = NSLayoutConstraint(item: btnStack, attribute: NSLayoutAttribute.height, relatedBy: NSLayoutRelation.equal, toItem: nil, attribute: NSLayoutAttribute.notAnAttribute, multiplier: 1.0, constant: 50)
+            NSLayoutConstraint.activate([leftConstraint, bottomConstraint, rightConstraint, heightConstraint])
+        }
+            
+        else if (appDelegate.orientation == "Portrait") {
+            btnStack.axis = .horizontal
+            NSLayoutConstraint.deactivate([leftConstraint, rightConstraint, heightConstraint])
+            leftConstraint = NSLayoutConstraint(item: btnStack, attribute: NSLayoutAttribute.left, relatedBy: NSLayoutRelation.equal, toItem: self.view, attribute: NSLayoutAttribute.left, multiplier: 1, constant: 50)
+            rightConstraint = NSLayoutConstraint(item: btnStack, attribute: NSLayoutAttribute.right, relatedBy: NSLayoutRelation.equal, toItem: self.view, attribute: NSLayoutAttribute.right, multiplier: 1, constant: -50)
+            heightConstraint = NSLayoutConstraint(item: btnStack, attribute: NSLayoutAttribute.height, relatedBy: NSLayoutRelation.equal, toItem: nil, attribute: NSLayoutAttribute.notAnAttribute, multiplier: 1.0, constant: 50)
+            NSLayoutConstraint.activate([leftConstraint, rightConstraint, heightConstraint])
+        }
+            
+        else {
+            btnStack.axis = .vertical
+            NSLayoutConstraint.deactivate([leftConstraint, rightConstraint, heightConstraint])
+            leftConstraint = NSLayoutConstraint(item: btnStack, attribute: NSLayoutAttribute.right, relatedBy: NSLayoutRelation.equal, toItem: self.view, attribute: NSLayoutAttribute.right, multiplier: 1, constant: -50)
+            rightConstraint = NSLayoutConstraint(item: btnStack, attribute: NSLayoutAttribute.right, relatedBy: NSLayoutRelation.equal, toItem: self.view, attribute: NSLayoutAttribute.right, multiplier: 1, constant: 0)
+            heightConstraint = NSLayoutConstraint(item: btnStack, attribute: NSLayoutAttribute.height, relatedBy: NSLayoutRelation.equal, toItem: nil, attribute: NSLayoutAttribute.notAnAttribute, multiplier: 1.0, constant: 200)
+            NSLayoutConstraint.activate([leftConstraint, rightConstraint, heightConstraint])
+        }
+        
+        
     }
     
     func setupButton() {
         
-        startButton = UIButton(frame: CGRect(x: 0,y: 0,width: 60,height: 50))
-        startButton.backgroundColor = UIColor.red
-        startButton.layer.masksToBounds = true
-        startButton.setTitle("start", for: UIControlState())
-        startButton.layer.cornerRadius = 20.0
-        startButton.layer.position = CGPoint(x: view.bounds.width/5, y:view.bounds.height-50)
-        startButton.addTarget(self, action: #selector(ViewController.onClickStartButton(_:)), for: .touchUpInside)
+        startBtn.backgroundColor = UIColor.red
+        startBtn.layer.masksToBounds = true
+        startBtn.layer.cornerRadius = 20.0
+        startBtn.addTarget(self, action: #selector(ViewController.onClickStartButton(_:)), for: .touchUpInside)
         
-        stopButton = UIButton(frame: CGRect(x: 0,y: 0,width: 60,height: 50))
-        stopButton.backgroundColor = UIColor.gray
-        stopButton.layer.masksToBounds = true
-        stopButton.setTitle("stop", for: UIControlState())
-        stopButton.layer.cornerRadius = 20.0
-        stopButton.layer.position = CGPoint(x: view.bounds.width/5 * 2, y:view.bounds.height-50)
-        stopButton.addTarget(self, action: #selector(ViewController.onClickStopButton(_:)), for: .touchUpInside)
+        stopBtn.backgroundColor = UIColor.gray
+        stopBtn.layer.masksToBounds = true
+        stopBtn.layer.cornerRadius = 20.0
+        stopBtn.addTarget(self, action: #selector(ViewController.onClickStopButton(_:)), for: .touchUpInside)
         
-        pauseResumeButton = UIButton(frame: CGRect(x: 0,y: 0,width: 60,height: 50))
-        pauseResumeButton.backgroundColor = UIColor.gray
-        pauseResumeButton.layer.masksToBounds = true
-        pauseResumeButton.setTitle("pause", for: UIControlState())
-        pauseResumeButton.layer.cornerRadius = 20.0
-        pauseResumeButton.layer.position = CGPoint(x: view.bounds.width/5 * 3, y:view.bounds.height-50)
-        pauseResumeButton.addTarget(self, action: #selector(ViewController.onClickPauseButton(_:)), for: .touchUpInside)
+        pauseResumeBtn.backgroundColor = UIColor.gray
+        pauseResumeBtn.layer.masksToBounds = true
+        pauseResumeBtn.layer.cornerRadius = 20.0
+        pauseResumeBtn.addTarget(self, action: #selector(ViewController.onClickPauseResumeButton(_:)), for: .touchUpInside)
+    }
+    
+    
+    func updatePreviewLayer(layer: AVCaptureConnection, orientation: AVCaptureVideoOrientation) {
         
-        view.addSubview(startButton)
-        view.addSubview(stopButton);
-        view.addSubview(pauseResumeButton);
+        layer.videoOrientation = orientation
+        videoLayer.position = self.videoView.center
+        // videoLayer.frame = self.videoView.bounds
+        
+    }
+    
+    override func viewDidLayoutSubviews() {
+        super.viewDidLayoutSubviews()
+        
+        if let connection =  self.videoLayer.connection  {
+            
+            let currentDevice: UIDevice = UIDevice.current
+            let orientation: UIDeviceOrientation = currentDevice.orientation
+            let previewLayerConnection : AVCaptureConnection = connection
+            if previewLayerConnection.isVideoOrientationSupported {
+                
+                switch (orientation) {
+                case .portrait: updatePreviewLayer(layer: previewLayerConnection, orientation: .portrait)
+                    break
+                    
+                case .landscapeRight: updatePreviewLayer(layer: previewLayerConnection, orientation: .landscapeLeft)
+                    break
+                    
+                case .landscapeLeft: updatePreviewLayer(layer: previewLayerConnection, orientation: .landscapeRight)
+                    break
+                    
+                case .portraitUpsideDown: updatePreviewLayer(layer: previewLayerConnection, orientation: .portraitUpsideDown)
+                    break
+                    
+                default: updatePreviewLayer(layer: previewLayerConnection, orientation: .portrait)
+                    break
+                }
+            }
+        }
     }
     
     func onClickStartButton(_ sender: UIButton){
         if !cameraEngine.isCapturing {
             cameraEngine.start()
-            changeButtonColor(startButton, color: UIColor.gray)
-            changeButtonColor(stopButton, color: UIColor.red)
+            changeButtonColor(startBtn, color: UIColor.gray)
+            changeButtonColor(stopBtn, color: UIColor.red)
         }
     }
     
-    func onClickPauseButton(_ sender: UIButton){
+    func onClickPauseResumeButton(_ sender: UIButton){
         if cameraEngine.isCapturing {
             if cameraEngine.isPaused {
                 cameraEngine.resume()
-                pauseResumeButton.setTitle("pause", for: UIControlState())
-                pauseResumeButton.backgroundColor = UIColor.gray
+                pauseResumeBtn.setTitle("pause", for: UIControlState())
+                pauseResumeBtn.backgroundColor = UIColor.gray
             }else{
                 cameraEngine.pause()
-                pauseResumeButton.setTitle("resume", for: UIControlState())
-                pauseResumeButton.backgroundColor = UIColor.blue
+                pauseResumeBtn.setTitle("resume", for: UIControlState())
+                pauseResumeBtn.backgroundColor = UIColor.blue
             }
         }
     }
@@ -114,14 +199,15 @@ class ViewController: UIViewController, AVCaptureVideoDataOutputSampleBufferDele
     func onClickStopButton(_ sender: UIButton){
         if cameraEngine.isCapturing {
             cameraEngine.stop()
-            changeButtonColor(startButton, color: UIColor.red)
-            changeButtonColor(stopButton, color: UIColor.gray)
+            changeButtonColor(startBtn, color: UIColor.red)
+            changeButtonColor(stopBtn, color: UIColor.gray)
         }
     }
     
     func changeButtonColor(_ target: UIButton, color: UIColor){
         target.backgroundColor = color
     }
+
 
 }
 

@@ -17,6 +17,7 @@ class CameraEngine : NSObject, AVCaptureVideoDataOutputSampleBufferDelegate, AVC
     let videoDevice = AVCaptureDevice.defaultDevice(withMediaType: AVMediaTypeVideo)
     let audioDevice = AVCaptureDevice.defaultDevice(withMediaType: AVMediaTypeAudio)
     var videoWriter : VideoWriter?
+    var appDelegate = UIApplication.shared.delegate as! AppDelegate
 
     var height:Int?
     var width:Int?
@@ -35,13 +36,13 @@ class CameraEngine : NSObject, AVCaptureVideoDataOutputSampleBufferDelegate, AVC
     func startup(){
         // video input
         videoDevice?.activeVideoMinFrameDuration = CMTimeMake(1, 30)
-        
       
         do
         {
             let videoInput = try AVCaptureDeviceInput(device: videoDevice) as AVCaptureDeviceInput
+            captureSession.sessionPreset = AVCaptureSessionPreset352x288
             captureSession.addInput(videoInput)
-            captureSession.sessionPreset = AVCaptureSessionPresetLow
+            
         }
         catch let error as NSError {
             print(error.localizedDescription)
@@ -63,7 +64,7 @@ class CameraEngine : NSObject, AVCaptureVideoDataOutputSampleBufferDelegate, AVC
         videoDataOutput.setSampleBufferDelegate(self, queue: recordingQueue)
         videoDataOutput.alwaysDiscardsLateVideoFrames = true
         videoDataOutput.videoSettings = [
-            kCVPixelBufferPixelFormatTypeKey as AnyHashable : Int(kCVPixelFormatType_420YpCbCr8BiPlanarVideoRange)
+            kCVPixelBufferPixelFormatTypeKey as AnyHashable : Int(kCVPixelFormatType_420YpCbCr8BiPlanarVideoRange)  
         ]
         captureSession.addOutput(videoDataOutput)
         
@@ -168,15 +169,33 @@ class CameraEngine : NSObject, AVCaptureVideoDataOutputSampleBufferDelegate, AVC
             var videoConnection:AVCaptureConnection?
             for connection in captureOutput.connections {
                 
+                
                 for port in (connection as AnyObject).inputPorts! {
                     
                     if (port as AnyObject).mediaType == AVMediaTypeVideo {
                         
                         videoConnection = connection as? AVCaptureConnection
                         
-                        if videoConnection!.isVideoMirroringSupported {
-                          //  videoConnection!.isVideoMirrored = true
-                            videoConnection?.videoOrientation = AVCaptureVideoOrientation.portrait
+                        if videoConnection!.isVideoOrientationSupported {
+                            //  videoConnection!.isVideoMirrored = true
+                            
+                            if (appDelegate.orientation == "Portrait") {
+                                videoConnection?.videoOrientation = AVCaptureVideoOrientation.portrait
+                            }
+                        
+                            else if (appDelegate.orientation == "LandscapeRight") {
+                                videoConnection?.videoOrientation = AVCaptureVideoOrientation.landscapeLeft
+                                
+                            }
+                                
+                            else if (appDelegate.orientation == "LandscapeLeft") {
+                                videoConnection?.videoOrientation = AVCaptureVideoOrientation.landscapeRight
+                            }
+                                
+                            else {
+                                videoConnection?.videoOrientation = AVCaptureVideoOrientation.portrait
+                            }
+                            
                         }
                     }
                 }
